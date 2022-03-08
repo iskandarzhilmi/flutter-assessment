@@ -1,6 +1,6 @@
 # flutter_assessment
 
-A new Flutter project.
+Flutter assessment.
 
 ## Getting Started
 
