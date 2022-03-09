@@ -17,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Contact>> _contact;
   bool favouriteSelected = false;
 
+  String textFieldValue = '';
+
   void getUserData() async {
     // var response = await get(Uri.parse('https://reqres.in/api/users?page=1'));
     // if (response.statusCode == 200) {
@@ -35,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     getUserData();
-
-    displayDatabase();
   }
 
   Future<List<Contact>> getContactFutureList() async {
@@ -109,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
+                          // if (textFieldValue.isEmpty) {
                           if (favouriteSelected) {
                             if (items[index].favourite == 'true') {
                               return contactSlidable(items[index]);
@@ -118,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else {
                             return contactSlidable(items[index]);
                           }
+                          // }
                         }),
                   );
                 }
@@ -257,8 +259,13 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(80.0),
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextField(
+            controller: TextEditingController(
+              text: textFieldValue,
+            ),
           ),
         ),
       ),
