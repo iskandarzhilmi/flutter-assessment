@@ -55,38 +55,34 @@ class DatabaseHandler {
     final db = await initializeDB();
     String favouriteString = 'true';
 
-    var query = db.query(
+    var futureMapList = db.query(
       'contact',
       columns: ["favourite"],
       where: 'id = ?',
       whereArgs: [id],
     );
-    query.then((value) {
+    futureMapList.then((value) async {
       favouriteString = value[0]['favourite'].toString();
-      // print('Before: ' + favouriteString);
+      print('Before: ' + favouriteString);
+
+      if (favouriteString.contains('false')) {
+        print('its false');
+        await db.execute(
+            'update contact set favourite="true" where id=' + id.toString());
+      } else {
+        print('its true');
+        await db.execute(
+            'update contact set favourite="false" where id=' + id.toString());
+      }
     });
-    if (favouriteString.contains('false')) {
-      print('hello');
-      // await db.update(
-      //   'contact',
-      //   {'favourite': 'true'},
-      //   where: 'id = ?',
-      //   whereArgs: [id],
-      // );
-      await db.execute(
-          'update contact set favourite="false" where id=' + id.toString());
-    } else {
-      print('not hello');
-      // await db.update(
-      //   'contact',
-      //   {'favourite': 'true'},
-      //   where: 'id = ?',
-      //   whereArgs: [id],
-      // );
-      await db.execute(
-          'update contact set favourite="true" where id=' + id.toString());
-    }
-    // print('After: ' + favouriteString);
+  }
+
+  Future<void> editContact(
+      int id, String firstName, String lastName, String email) async {
+    final db = await initializeDB();
+    await db.execute(
+        'update contact set firstName="$firstName", lastName="$lastName", email="$email" where id=' +
+            id.toString());
   }
 
   Future<void> deleteAllContact() async {

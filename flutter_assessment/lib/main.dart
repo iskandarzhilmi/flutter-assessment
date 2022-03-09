@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/screens/home_screen.dart';
+import 'package:flutter_assessment/screens/profile_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:flutter_assessment/services/database.dart';
 import 'package:hive/hive.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: HomeScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
+        // ProfileScreen.id: (context) => ProfileScreen(),
       },
     );
   }
