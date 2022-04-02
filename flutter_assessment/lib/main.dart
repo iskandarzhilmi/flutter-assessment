@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen.dart';
-import 'package:flutter_assessment/views/profile_screen.dart';
-import 'package:flutter_assessment/services/contact_model.dart';
+import 'views/home_screen/home_screen.dart';
 import 'package:flutter_assessment/services/database.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +18,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // colorScheme: ColorScheme.fromSwatch().copyWith(
+        //   primary: const Color(0xFFEBF8F6),
+        // ),
+        textTheme: GoogleFonts.ralewayTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
       initialRoute: HomeScreen.id,
       routes: {

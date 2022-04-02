@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/views/profile_screen.dart';
 import 'package:flutter_assessment/services/database.dart';
@@ -43,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void fetchContact() async {
     DatabaseHandler().deleteAllContact();
 
-    var response = await get(Uri.parse('https://reqres.in/api/users?page=1'));
+    Response response =
+        await get(Uri.parse('https://reqres.in/api/users?page=1'));
     var data;
 
     for (int i = 0; i < 6; i++) {
@@ -66,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
         child: Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
         onPressed: () {},
       ),
@@ -74,44 +75,52 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           ContactHeader(),
           SearchTextField(),
-          ContactNavigationBar(),
           Expanded(
-            child: FutureBuilder<List<Contact>>(
-              future: contactListFuture,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Contact>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  print(snapshot);
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final items = snapshot.data ?? <Contact>[];
-                  return RefreshIndicator(
-                    onRefresh: onRefresh,
-                    child: ListView.builder(
-                        itemCount: items.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (favouriteSelected) {
-                            if (items[index].favourite == 'true') {
-                              return contactSlidable(items[index]);
-                            } else {
-                              return Container();
-                            }
-                          } else {
-                            return contactSlidable(items[index]);
-                          }
-                        }),
-                  );
-                }
-              },
+            child: Column(
+              children: [
+                ContactNavigationBar(),
+                Expanded(
+                  child: FutureBuilder<List<Contact>>(
+                    future: contactListFuture,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Contact>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final items = snapshot.data ?? <Contact>[];
+                        return contactListView(items);
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
     ));
+  }
+
+  RefreshIndicator contactListView(List<Contact> items) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (favouriteSelected) {
+            if (items[index].favourite == 'true') {
+              return contactSlidable(items[index]);
+            } else {
+              return Container();
+            }
+          } else {
+            return contactSlidable(items[index]);
+          }
+        },
+      ),
+    );
   }
 
   Slidable contactSlidable(Contact contact) {
@@ -258,12 +267,22 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(), //to make it spaceBetween
-          Text('My Contacts'),
+          const Text(
+            'My Contacts',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
           InkWell(
             onTap: () {
               fetchContact();
             },
-            child: Icon(Icons.refresh),
+            child: Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

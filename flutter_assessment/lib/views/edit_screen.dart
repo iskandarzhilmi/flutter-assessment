@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen.dart';
+import 'home_screen/home_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:flutter_assessment/services/database.dart';
 
