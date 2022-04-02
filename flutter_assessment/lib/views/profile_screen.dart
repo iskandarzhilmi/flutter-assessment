@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/screens/edit_screen.dart';
+import 'package:flutter_assessment/views/edit_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:flutter_assessment/services/database.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfileScreen extends StatefulWidget {
   static const String id = 'profile_screen';
 
-  const ProfileScreen(this.contact);
+  ProfileScreen(this.contact);
 
   final Contact contact;
 

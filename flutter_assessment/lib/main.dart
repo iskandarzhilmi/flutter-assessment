@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/screens/home_screen.dart';
-import 'package:flutter_assessment/screens/profile_screen.dart';
+import 'package:flutter_assessment/views/home_screen.dart';
+import 'package:flutter_assessment/views/profile_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:flutter_assessment/services/database.dart';
 import 'package:hive/hive.dart';
@@ -15,10 +15,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
       initialRoute: HomeScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
-        // ProfileScreen.id: (context) => ProfileScreen(),
       },
     );
   }

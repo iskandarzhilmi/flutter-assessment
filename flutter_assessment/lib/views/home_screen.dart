@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/screens/profile_screen.dart';
+import 'package:flutter_assessment/views/profile_screen.dart';
 import 'package:flutter_assessment/services/database.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
@@ -9,43 +9,34 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
+
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Contact>> _contact;
+  late Future<List<Contact>> contactListFuture;
   bool favouriteSelected = false;
-
   String textFieldValue = '';
-
-  void getUserData() async {
-    // var response = await get(Uri.parse('https://reqres.in/api/users?page=1'));
-    // if (response.statusCode == 200) {
-    //   print('hello: ' + jsonDecode(response.body)['data'][0].toString());
-    // } else {
-    //   print(response.statusCode);
-    // }
-  }
 
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      _contact = getContactFutureList();
+      contactListFuture = getContactListFuture();
     });
-
-    getUserData();
   }
 
-  Future<List<Contact>> getContactFutureList() async {
+  Future<List<Contact>> getContactListFuture() async {
     return await DatabaseHandler().getContactFutureList();
   }
 
   Future<void> onRefresh() async {
     setState(() {
-      _contact = getContactFutureList();
+      contactListFuture = getContactListFuture();
     });
   }
 
@@ -67,13 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       DatabaseHandler().insertContact(contact);
       onRefresh();
-      // DatabaseHandler().contactList();
     }
-  }
-
-  void displayDatabase() async {
-    // print(await DatabaseHandler().contactList());
-    // DatabaseHandler().contactList();
   }
 
   @override
@@ -92,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ContactNavigationBar(),
           Expanded(
             child: FutureBuilder<List<Contact>>(
-              future: _contact,
+              future: contactListFuture,
               builder: (BuildContext context,
                   AsyncSnapshot<List<Contact>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -109,7 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          // if (textFieldValue.isEmpty) {
                           if (favouriteSelected) {
                             if (items[index].favourite == 'true') {
                               return contactSlidable(items[index]);
@@ -119,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else {
                             return contactSlidable(items[index]);
                           }
-                          // }
                         }),
                   );
                 }
@@ -262,11 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(80.0),
             color: Colors.white,
           ),
-          child: TextField(
-            controller: TextEditingController(
-              text: textFieldValue,
-            ),
-          ),
         ),
       ),
     );
@@ -275,11 +253,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Container ContactHeader() {
     return Container(
       height: 70.0,
-      color: Colors.green,
+      color: Color(0xff32baa5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(),
+          Container(), //to make it spaceBetween
           Text('My Contacts'),
           InkWell(
             onTap: () {
