@@ -76,26 +76,34 @@ class _HomeScreenState extends State<HomeScreen> {
           ContactHeader(),
           SearchTextField(),
           Expanded(
-            child: Column(
-              children: [
-                ContactNavigationBar(),
-                Expanded(
-                  child: FutureBuilder<List<Contact>>(
-                    future: contactListFuture,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Contact>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        final items = snapshot.data ?? <Contact>[];
-                        return contactListView(items);
-                      }
-                    },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+              ),
+              child: Column(
+                children: [
+                  ContactNavigationBar(),
+                  Expanded(
+                    child: FutureBuilder<List<Contact>>(
+                      future: contactListFuture,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Contact>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          final items = snapshot.data ?? <Contact>[];
+                          return contactListView(items);
+                        }
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
