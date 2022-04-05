@@ -1,7 +1,6 @@
-import 'dart:convert';
-import 'package:hive/hive.dart';
+import 'package:equatable/equatable.dart';
 
-class Contact {
+class Contact extends Equatable {
   final int id;
   final String firstName;
   final String lastName;
@@ -30,10 +29,14 @@ class Contact {
   }
 
   Contact.fromMap(Map<String, dynamic> data)
-      : id = int.parse(data['id']),
+      : id = data['id'],
         email = data['email'],
         firstName = data['first_name'],
         lastName = data['last_name'],
         avatar = data['avatar'],
-        favourite = data['favourite'];
+        favourite = 'false';
+
+  @override
+  List<Object?> get props =>
+      [id, email, firstName, lastName, avatar, favourite];
 }

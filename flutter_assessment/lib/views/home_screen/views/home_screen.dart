@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_bloc.dart';
 import 'package:flutter_assessment/views/profile_screen.dart';
 import 'package:flutter_assessment/services/database.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -46,21 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Response response =
         await get(Uri.parse('https://reqres.in/api/users?page=1'));
-    var data;
+    Map<String, dynamic> data;
 
     for (int i = 0; i < 6; i++) {
       data = jsonDecode(response.body)['data'][i];
-      var contact = Contact(
-        id: data['id'],
-        email: data['email'],
-        firstName: data['first_name'],
-        lastName: data['last_name'],
-        avatar: data['avatar'],
-        favourite: 'false',
-      );
+      Contact contact = Contact.fromMap(data);
       DatabaseHandler().insertContact(contact);
-      onRefresh();
     }
+    onRefresh();
   }
 
   @override
@@ -71,42 +66,62 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
         onPressed: () {},
       ),
-      body: Column(
-        children: [
-          ContactHeader(),
-          SearchTextField(),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              child: Column(
+      body: BlocProvider(
+        create: (context) => ContactBloc()..add(const ContactRefreshPressed()),
+        child: BlocBuilder<ContactBloc, ContactStateModel>(
+          builder: (context, state) {
+            if (state.contactState is ContactLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state.contactState is ContactLoaded) {
+              return Column(
                 children: [
-                  ContactNavigationBar(),
+                  ContactHeader(
+                    contactBloc: context.read<ContactBloc>(),
+                  ),
+                  SearchTextField(),
                   Expanded(
-                    child: FutureBuilder<List<Contact>>(
-                      future: contactListFuture,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Contact>> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          final items = snapshot.data ?? <Contact>[];
-                          return contactListView(items);
-                        }
-                      },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                      ),
+                      child: Column(
+                        children: [
+                          ContactNavigationBar(),
+                          Expanded(
+                            child: FutureBuilder<List<Contact>>(
+                              future: contactListFuture,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Contact>> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  final items = snapshot.data ?? <Contact>[];
+                                  return contactListView(items);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-        ],
+              );
+            } else if (state.contactState is ContactError) {
+              return Text((state.contactState as ContactError).message);
+            }
+            return Container(
+              child: Text('Error state'),
+            );
+          },
+        ),
       ),
     ));
   }
@@ -267,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container ContactHeader() {
+  Container ContactHeader({required ContactBloc contactBloc}) {
     return Container(
       height: 70.0,
       color: Color(0xff32baa5),
@@ -285,7 +300,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: () {
-              fetchContact();
+              // fetchContact();
+              contactBloc.add(ContactRefreshPressed());
             },
             child: Icon(
               Icons.refresh,
