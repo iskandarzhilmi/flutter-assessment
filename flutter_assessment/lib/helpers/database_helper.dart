@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'contact_model.dart';
+import '../services/contact_model.dart';
 
-class DatabaseHandler {
+class DatabaseHelper {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
@@ -23,6 +23,18 @@ class DatabaseHandler {
       contact.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> insertContactList(List<Contact> contactList) async {
+    final db = await initializeDB();
+
+    for (Contact contact in contactList) {
+      await db.insert(
+        'contact',
+        contact.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
   }
 
   Future<List<Contact>> getContactListFuture() async {

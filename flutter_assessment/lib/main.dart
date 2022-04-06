@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_bloc.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'views/home_screen/views/home_screen.dart';
-import 'package:flutter_assessment/services/database.dart';
+import 'helpers/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHandler().initializeDB();
+  await DatabaseHelper().initializeDB();
   runApp(const MyApp());
 }
 

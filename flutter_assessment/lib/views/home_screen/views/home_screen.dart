@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_bloc.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
 import 'package:flutter_assessment/views/profile_screen.dart';
-import 'package:flutter_assessment/services/database.dart';
+import '../../../helpers/database_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
@@ -29,23 +29,22 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     setState(() {
-      contactListFuture = getContactListFuture();
-      // context.read<ContactBloc>().add(ContactRefreshPressed());
+      contactListFuture = DatabaseHelper().getContactListFuture();
     });
   }
 
-  Future<List<Contact>> getContactListFuture() async {
-    return await DatabaseHandler().getContactListFuture();
-  }
+  // Future<List<Contact>> getContactListFuture() async {
+  //   return await DatabaseHelper().getContactListFuture();
+  // }
 
   Future<void> onRefresh() async {
     setState(() {
-      contactListFuture = getContactListFuture();
+      contactListFuture = DatabaseHelper().getContactListFuture();
     });
   }
 
   void fetchContact() async {
-    DatabaseHandler().deleteAllContact();
+    DatabaseHelper().deleteAllContact();
 
     Response response =
         await get(Uri.parse('https://reqres.in/api/users?page=1'));
@@ -54,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (int i = 0; i < 6; i++) {
       data = jsonDecode(response.body)['data'][i];
       Contact contact = Contact.fromMap(data);
-      DatabaseHandler().insertContact(contact);
+      DatabaseHelper().insertContact(contact);
     }
     onRefresh();
   }
@@ -82,21 +81,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ContactNavigationBar(),
                     Expanded(
-                      child: BlocBuilder<ContactBloc, ContactStateModel>(
+                      child: BlocBuilder<ContactBloc, ContactRefreshModel>(
                         builder: (context, state) {
-                          if (state.contactState is ContactLoading) {
+                          if (state.contactState is ContactRefreshLoading) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
-                          } else if (state.contactState is ContactError) {
+                          } else if (state.contactState
+                              is ContactRefreshError) {
                             return Text(
-                                (state.contactState as ContactError).message);
-                          } else if (state.contactState is ContactLoaded) {
+                                (state.contactState as ContactRefreshError)
+                                    .message);
+                          } else if (state.contactState
+                              is ContactRefreshLoaded) {
+                            //TODO: Think what to do, whether to directly call deleteAllContact() or use cubit/bloc.
+
+                            //I think what I did here is calling directly from the api instead of calling from the database.
+                            //I think about adding into the database using another bloc. (insertContactList())
+
                             return contactListView(state.contactList);
                           }
-                          return Container(
-                            child: Text('Error state'),
-                          );
+                          return const Text('Error state');
                         },
                       ),
                     ),
@@ -204,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          DatabaseHandler().deleteContact(contact.id);
+                          DatabaseHelper().deleteContact(contact.id);
                           onRefresh();
                           Navigator.pop(context);
                         },
@@ -270,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Container ContactHeader({required ContactBloc contactBloc}) {
     return Container(
       height: 70.0,
-      color: Color(0xff32baa5),
+      color: const Color(0xff32baa5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
