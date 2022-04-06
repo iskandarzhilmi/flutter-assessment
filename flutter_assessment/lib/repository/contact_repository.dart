@@ -8,7 +8,7 @@ abstract class ContactRepoInterface {
   factory ContactRepoInterface() => ContactRepo();
 
   Future<Contact> getSingleContact(int index);
-  Future<List<Contact>> getContactList();
+  Future<List<Contact>> getContactListFromApi();
 }
 
 class ContactRepo implements ContactRepoInterface {
@@ -25,7 +25,10 @@ class ContactRepo implements ContactRepoInterface {
   }
 
   @override
-  Future<List<Contact>> getContactList() async {
+  Future<List<Contact>> getContactListFromApi() async {
+    //Todo: Add
+
+    //Return contact list
     List<Contact> contactList = [];
     Response response =
         await get(Uri.parse('https://reqres.in/api/users?page=1'));

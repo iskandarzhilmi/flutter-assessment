@@ -23,12 +23,12 @@ class ContactBloc extends Bloc<ContactEvent, ContactStateModel> {
         ),
       );
 
-      List<Contact> contactList = await contactRepoInterface.getContactList();
+      List<Contact> contactList =
+          await contactRepoInterface.getContactListFromApi();
       emit(state.copyWith(
         newContactList: contactList,
         newContactState: ContactLoaded(),
       ));
-      // if(state.copyWith(newContactList: contactList,))
     } catch (e) {
       emit(
         state.copyWith(

@@ -25,20 +25,21 @@ class DatabaseHandler {
     );
   }
 
-  Future<List<Contact>> getContactFutureList() async {
+  Future<List<Contact>> getContactListFuture() async {
     final db = await initializeDB();
     final List<Map<String, dynamic>> queryResult = await db.query('contact');
     print(queryResult);
-    // return queryResult.map((e) => Contact.fromMap(e)).toList();
     return queryResult
-        .map((data) => Contact(
-              id: data['id'],
-              email: data['email'],
-              firstName: data['firstName'],
-              lastName: data['lastName'],
-              avatar: data['avatar'],
-              favourite: data['favourite'],
-            ))
+        .map(
+          (data) => Contact(
+            id: data['id'],
+            email: data['email'],
+            firstName: data['firstName'],
+            lastName: data['lastName'],
+            avatar: data['avatar'],
+            favourite: data['favourite'],
+          ),
+        )
         .toList();
   }
 
@@ -62,6 +63,7 @@ class DatabaseHandler {
       whereArgs: [id],
     );
     futureMapList.then((value) async {
+      print(value);
       favouriteString = value[0]['favourite'].toString();
       print('Before: ' + favouriteString);
 

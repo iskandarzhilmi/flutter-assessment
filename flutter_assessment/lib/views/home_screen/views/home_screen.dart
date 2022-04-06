@@ -30,11 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       contactListFuture = getContactListFuture();
+      // context.read<ContactBloc>().add(ContactRefreshPressed());
     });
   }
 
   Future<List<Contact>> getContactListFuture() async {
-    return await DatabaseHandler().getContactFutureList();
+    return await DatabaseHandler().getContactListFuture();
   }
 
   Future<void> onRefresh() async {
@@ -61,69 +62,53 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {},
-      ),
-      body: BlocProvider(
-        create: (context) => ContactBloc()..add(const ContactRefreshPressed()),
-        child: BlocBuilder<ContactBloc, ContactStateModel>(
-          builder: (context, state) {
-            if (state.contactState is ContactLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state.contactState is ContactLoaded) {
-              return Column(
-                children: [
-                  ContactHeader(
-                    contactBloc: context.read<ContactBloc>(),
-                  ),
-                  SearchTextField(),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                      ),
-                      child: Column(
-                        children: [
-                          ContactNavigationBar(),
-                          Expanded(
-                            child: FutureBuilder<List<Contact>>(
-                              future: contactListFuture,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<Contact>> snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  final items = snapshot.data ?? <Contact>[];
-                                  return contactListView(items);
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {},
+        ),
+        body: Column(
+          children: [
+            ContactHeader(
+              contactBloc: context.read<ContactBloc>(),
+            ),
+            SearchTextField(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                child: Column(
+                  children: [
+                    ContactNavigationBar(),
+                    Expanded(
+                      child: BlocBuilder<ContactBloc, ContactStateModel>(
+                        builder: (context, state) {
+                          if (state.contactState is ContactLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state.contactState is ContactError) {
+                            return Text(
+                                (state.contactState as ContactError).message);
+                          } else if (state.contactState is ContactLoaded) {
+                            return contactListView(state.contactList);
+                          }
+                          return Container(
+                            child: Text('Error state'),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                ],
-              );
-            } else if (state.contactState is ContactError) {
-              return Text((state.contactState as ContactError).message);
-            }
-            return Container(
-              child: Text('Error state'),
-            );
-          },
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    ));
+    );
+    // ));
   }
 
   RefreshIndicator contactListView(List<Contact> items) {
@@ -168,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               child: favourite
-                  ? Icon(
+                  ? const Icon(
                       Icons.star,
                       color: Colors.yellow,
                     )
@@ -301,7 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
           InkWell(
             onTap: () {
               // fetchContact();
-              contactBloc.add(ContactRefreshPressed());
+              contactBloc.add(const ContactRefreshPressed());
+              onRefresh();
             },
             child: Icon(
               Icons.refresh,
@@ -313,3 +299,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// BlocBuilder<ContactBloc, ContactStateModel>

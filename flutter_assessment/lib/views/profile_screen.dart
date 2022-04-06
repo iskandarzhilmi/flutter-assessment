@@ -45,9 +45,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: Icon(Icons.arrow_back),
+                    child: const Icon(Icons.arrow_back),
                   ),
-                  Text('Profile'),
+                  const Text('Profile'),
                   Container(),
                 ],
               ),
@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   },
-                  child: Text('Edit'),
+                  child: const Text('Edit'),
                 ),
               ],
             ),
@@ -83,7 +83,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircleAvatar(
                 backgroundImage: NetworkImage(contact.avatar),
                 radius: 50.0,
-                child: favourite ? Icon(Icons.star) : Icon(Icons.star_border),
+                child: favourite
+                    ? const Icon(Icons.star)
+                    : const Icon(Icons.star_border),
               ),
             ),
             Text(contact.firstName + ' ' + contact.lastName),
@@ -92,15 +94,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Colors.grey,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
-                  Icon(Icons.email),
-                  SizedBox(
+                  const Icon(Icons.email),
+                  const SizedBox(
                     height: 20.0,
                   ),
                   Text(contact.email),
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                 ],
@@ -118,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text('Send Email'),
                   ),
                 ),

@@ -34,7 +34,7 @@ class _EditScreenState extends State<EditScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
@@ -49,7 +49,7 @@ class _EditScreenState extends State<EditScreen> {
                       },
                       child: Icon(Icons.arrow_back),
                     ),
-                    Text('Profile'),
+                    const Text('Profile'),
                     Container(),
                   ],
                 ),
@@ -102,7 +102,7 @@ class _EditScreenState extends State<EditScreen> {
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text('Done'),
                           ),
                         ),
