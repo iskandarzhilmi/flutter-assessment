@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh/contact_refresh_bloc.dart';
 import 'package:flutter_assessment/views/profile_screen.dart';
 import '../../../helpers/database_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,18 +28,28 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    setState(() {
-      contactListFuture = DatabaseHelper().getContactListFuture();
-    });
+    onRefresh();
+
+    // setState(() {
+    //   contactListFuture = DatabaseHelper().getContactList();
+    // });
   }
 
   // Future<List<Contact>> getContactListFuture() async {
   //   return await DatabaseHelper().getContactListFuture();
   // }
 
+  // Future<void> onRefresh() async {
+  //   setState(() {
+  //     contactListFuture = DatabaseHelper().getContactList();
+  //   });
+  // }
+
   Future<void> onRefresh() async {
     setState(() {
-      contactListFuture = DatabaseHelper().getContactListFuture();
+      context
+          .read<ContactRefreshBloc>()
+          .add(const ContactRefreshFromDatabaseTriggered());
     });
   }
 
@@ -69,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             ContactHeader(
-              contactBloc: context.read<ContactBloc>(),
+              contactBloc: context.read<ContactRefreshBloc>(),
             ),
             SearchTextField(),
             Expanded(
@@ -81,25 +91,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ContactNavigationBar(),
                     Expanded(
-                      child: BlocBuilder<ContactBloc, ContactRefreshModel>(
+                      child:
+                          BlocBuilder<ContactRefreshBloc, ContactRefreshModel>(
                         builder: (context, state) {
-                          if (state.contactState is ContactRefreshLoading) {
+                          if (state.contactRefreshState
+                              is ContactRefreshLoading) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
-                          } else if (state.contactState
+                          } else if (state.contactRefreshState
                               is ContactRefreshError) {
-                            return Text(
-                                (state.contactState as ContactRefreshError)
-                                    .message);
-                          } else if (state.contactState
+                            return Text((state.contactRefreshState
+                                    as ContactRefreshError)
+                                .message);
+                          } else if (state.contactRefreshState
                               is ContactRefreshLoaded) {
                             //TODO: Think what to do, whether to directly call deleteAllContact() or use cubit/bloc.
 
                             //I think what I did here is calling directly from the api instead of calling from the database.
                             //I think about adding into the database using another bloc. (insertContactList())
 
-                            return contactListView(state.contactList);
+                            return contactListView(
+                                state.contactListFromDatabase);
                           }
                           return const Text('Error state');
                         },
@@ -272,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container ContactHeader({required ContactBloc contactBloc}) {
+  Container ContactHeader({required ContactRefreshBloc contactBloc}) {
     return Container(
       height: 70.0,
       color: const Color(0xff32baa5),
@@ -291,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
           InkWell(
             onTap: () {
               // fetchContact();
-              contactBloc.add(const ContactRefreshPressed());
+              contactBloc.add(const ContactRefreshButtonPressed());
               onRefresh();
             },
             child: Icon(

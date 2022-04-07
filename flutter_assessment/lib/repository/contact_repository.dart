@@ -9,6 +9,8 @@ abstract class ContactRefreshRepoInterface {
 
   Future<Contact> getSingleContact(int index);
   Future<List<Contact>> getContactListFromApi();
+  Future<void> insertContactList(List<Contact> contactList);
+  Future<List<Contact>> getContactListFromDatabase();
 }
 
 class ContactRepo implements ContactRefreshRepoInterface {
@@ -37,5 +39,15 @@ class ContactRepo implements ContactRefreshRepoInterface {
       contactList.add(contact);
     }
     return contactList;
+  }
+
+  @override
+  Future<void> insertContactList(List<Contact> contactList) async {
+    await DatabaseHelper().insertContactList(contactList);
+  }
+
+  @override
+  Future<List<Contact>> getContactListFromDatabase() async{
+    return await DatabaseHelper().getContactList();
   }
 }
