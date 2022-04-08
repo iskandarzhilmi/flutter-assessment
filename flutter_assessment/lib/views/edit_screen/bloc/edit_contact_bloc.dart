@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 part 'edit_contact_event.dart';
 part 'edit_contact_state.dart';
 
-//TODO: Replace the name and related to it with suitable term.
+//TODO: Replace the name of the bloc and related to it with suitable term.
 class EditContactBloc extends Bloc<EditContactEvent, EditContactModel> {
   EditContactBloc() : super(EditContactModel.initial()) {
     on<EditContactSubmitted>(_onEditContactSubmitted);
