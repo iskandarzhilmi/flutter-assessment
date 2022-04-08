@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'home_screen/views/home_screen.dart';
+import 'package:flutter_assessment/views/edit_screen/bloc/edit_contact_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../home_screen/views/home_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
-import '../helpers/database_helper.dart';
+import '../../../helpers/database_helper.dart';
 
 class EditScreen extends StatefulWidget {
-  EditScreen(this.contact);
+  EditScreen(this.contact, {Key? key}) : super(key: key);
 
   Contact contact;
 
@@ -22,7 +24,6 @@ class _EditScreenState extends State<EditScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     firstName = contact.firstName;
     lastName = contact.lastName;
@@ -90,8 +91,18 @@ class _EditScreenState extends State<EditScreen> {
                       const SizedBox(height: 20.0),
                       InkWell(
                         onTap: () {
-                          DatabaseHelper().editContact(
-                              contact.id, firstName, lastName, email);
+                          context.read<EditContactBloc>().add(
+                                EditContactSubmitted(
+                                  Contact(
+                                    id: contact.id,
+                                    email: email,
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    avatar: contact.avatar,
+                                    favourite: contact.favourite,
+                                  ),
+                                ),
+                              );
 
                           Navigator.of(context)
                               .popUntil(ModalRoute.withName(HomeScreen.id));

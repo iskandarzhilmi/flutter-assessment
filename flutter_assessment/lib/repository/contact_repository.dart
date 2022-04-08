@@ -4,16 +4,18 @@ import 'package:flutter_assessment/services/contact_model.dart';
 import '../helpers/database_helper.dart';
 import 'package:http/http.dart';
 
-abstract class ContactRefreshRepoInterface {
-  factory ContactRefreshRepoInterface() => ContactRepo();
+abstract class ContactRepoInterface {
+  factory ContactRepoInterface() => ContactRepo();
 
   Future<Contact> getSingleContact(int index);
   Future<List<Contact>> getContactListFromApi();
   Future<void> insertContactList(List<Contact> contactList);
   Future<List<Contact>> getContactListFromDatabase();
+  Future<void> editContact(
+      int id, String firstName, String lastName, String email);
 }
 
-class ContactRepo implements ContactRefreshRepoInterface {
+class ContactRepo implements ContactRepoInterface {
   @override
   Future<Contact> getSingleContact(int index) async {
     Response response =
@@ -47,7 +49,13 @@ class ContactRepo implements ContactRefreshRepoInterface {
   }
 
   @override
-  Future<List<Contact>> getContactListFromDatabase() async{
+  Future<List<Contact>> getContactListFromDatabase() async {
     return await DatabaseHelper().getContactList();
+  }
+
+  @override
+  Future<void> editContact(
+      int id, String firstName, String lastName, String email) async {
+    return await DatabaseHelper().editContact(id, firstName, lastName, email);
   }
 }

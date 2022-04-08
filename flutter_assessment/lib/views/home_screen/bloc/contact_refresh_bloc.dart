@@ -26,9 +26,9 @@ class ContactRefreshBloc
       );
 
       List<Contact> contactListFromApi =
-          await ContactRefreshRepoInterface().getContactListFromApi();
+          await ContactRepoInterface().getContactListFromApi();
 
-      await ContactRefreshRepoInterface().insertContactList(contactListFromApi);
+      await ContactRepoInterface().insertContactList(contactListFromApi);
 
       emit(
         state.copyWith(
@@ -38,7 +38,7 @@ class ContactRefreshBloc
       );
 
       List<Contact> contactListFromDatabase =
-          await ContactRefreshRepoInterface().getContactListFromDatabase();
+          await ContactRepoInterface().getContactListFromDatabase();
 
       emit(
         state.copyWith(
@@ -66,7 +66,10 @@ class ContactRefreshBloc
       );
 
       List<Contact> contactListFromDatabase =
-          await ContactRefreshRepoInterface().getContactListFromDatabase();
+          await ContactRepoInterface().getContactListFromDatabase();
+
+      //Artificial delay
+      // await Future.delayed(Duration(seconds: 1));
 
       emit(
         state.copyWith(
@@ -77,8 +80,9 @@ class ContactRefreshBloc
     } catch (e) {
       emit(
         state.copyWith(
-            newContactRefreshState:
-                ContactRefreshError(message: 'Fetching from database failed.')),
+          newContactRefreshState:
+              ContactRefreshError(message: 'Fetching from database failed.'),
+        ),
       );
     }
   }

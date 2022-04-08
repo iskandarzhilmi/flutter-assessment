@@ -3,8 +3,7 @@ part of 'contact_refresh_bloc.dart';
 class ContactRefreshModel extends Equatable {
   final List<Contact> contactListFromApi;
   final List<Contact> contactListFromDatabase;
-  final ContactListingState contactRefreshState;
-
+  final ContactRefreshState contactRefreshState;
 
   const ContactRefreshModel({
     required this.contactListFromApi,
@@ -13,7 +12,8 @@ class ContactRefreshModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => [contactListFromApi, contactListFromDatabase, contactRefreshState];
+  List<Object?> get props =>
+      [contactListFromApi, contactListFromDatabase, contactRefreshState];
 
   factory ContactRefreshModel.initial() {
     return ContactRefreshModel(
@@ -22,33 +22,35 @@ class ContactRefreshModel extends Equatable {
       contactRefreshState: ContactRefreshLoading(),
     );
   }
+
   ContactRefreshModel copyWith({
     List<Contact>? newContactListFromApi,
     List<Contact>? newContactListFromDatabase,
-    ContactListingState? newContactRefreshState,
+    ContactRefreshState? newContactRefreshState,
   }) {
     return ContactRefreshModel(
       contactListFromApi: newContactListFromApi ?? contactListFromApi,
-      contactListFromDatabase: newContactListFromDatabase ?? contactListFromDatabase,
+      contactListFromDatabase:
+          newContactListFromDatabase ?? contactListFromDatabase,
       contactRefreshState: newContactRefreshState ?? contactRefreshState,
     );
   }
 }
 
-abstract class ContactListingState extends Equatable {
+abstract class ContactRefreshState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class ContactRefreshLoading extends ContactListingState {}
+class ContactRefreshLoading extends ContactRefreshState {}
 
-class ContactRefreshLoadingFromApi extends ContactListingState {}
+class ContactRefreshLoadingFromApi extends ContactRefreshState {}
 
-class ContactRefreshLoadingFromDatabase extends ContactListingState {}
+class ContactRefreshLoadingFromDatabase extends ContactRefreshState {}
 
-class ContactRefreshLoaded extends ContactListingState {}
+class ContactRefreshLoaded extends ContactRefreshState {}
 
-class ContactRefreshError extends ContactListingState {
+class ContactRefreshError extends ContactRefreshState {
   final String message;
   ContactRefreshError({required this.message});
   @override

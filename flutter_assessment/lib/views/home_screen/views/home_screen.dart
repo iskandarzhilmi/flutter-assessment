@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh/contact_refresh_bloc.dart';
-import 'package:flutter_assessment/views/profile_screen.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
+import 'package:flutter_assessment/views/profile_screen/views/profile_screen.dart';
 import '../../../helpers/database_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,23 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
     onRefresh();
-
-    // setState(() {
-    //   contactListFuture = DatabaseHelper().getContactList();
-    // });
   }
-
-  // Future<List<Contact>> getContactListFuture() async {
-  //   return await DatabaseHelper().getContactListFuture();
-  // }
-
-  // Future<void> onRefresh() async {
-  //   setState(() {
-  //     contactListFuture = DatabaseHelper().getContactList();
-  //   });
-  // }
 
   Future<void> onRefresh() async {
     setState(() {
@@ -95,9 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           BlocBuilder<ContactRefreshBloc, ContactRefreshModel>(
                         builder: (context, state) {
                           if (state.contactRefreshState
-                              is ContactRefreshLoading) {
+                              is ContactRefreshLoadingFromApi) {
                             return const Center(
                               child: CircularProgressIndicator(),
+                              // child: Text('Loading from API'),
+                            );
+                          } else if (state.contactRefreshState
+                              is ContactRefreshLoadingFromDatabase) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                              // child: Text('Loading from database'),
                             );
                           } else if (state.contactRefreshState
                               is ContactRefreshError) {
@@ -106,13 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .message);
                           } else if (state.contactRefreshState
                               is ContactRefreshLoaded) {
-                            //TODO: Think what to do, whether to directly call deleteAllContact() or use cubit/bloc.
-
-                            //I think what I did here is calling directly from the api instead of calling from the database.
-                            //I think about adding into the database using another bloc. (insertContactList())
-
                             return contactListView(
-                                state.contactListFromDatabase);
+                              state.contactListFromDatabase,
+                            );
                           }
                           return const Text('Error state');
                         },
@@ -156,16 +144,19 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       favourite = false;
     }
-
     return Slidable(
-      // ignore: prefer_const_constructors
       child: ListTile(
         leading: CircleAvatar(
           backgroundImage: NetworkImage(contact.avatar),
         ),
         title: Row(
           children: [
-            Text(contact.firstName + ' ' + contact.lastName),
+            Text(
+              contact.firstName + ' ' + contact.lastName,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(
               width: 20.0,
             ),
@@ -184,12 +175,12 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {
             launch('mailto:' + contact.email);
           },
-          child: Icon(Icons.email),
+          child: const Icon(Icons.email),
         ),
         // trailing: Icon(Icons.rocket),
       ),
       endActionPane: ActionPane(
-        motion: ScrollMotion(),
+        motion: const ScrollMotion(),
         children: [
           SlidableAction(
             onPressed: (context) {
@@ -201,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ).then((value) => onRefresh());
             },
             icon: Icons.edit,
-            backgroundColor: Color(0xFFEBF8F6),
+            backgroundColor: const Color(0xFFEBF8F6),
             foregroundColor: Colors.yellow,
           ),
           SlidableAction(
@@ -211,14 +202,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 barrierDismissible: true,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text('Delete?'),
-                    content: Text('Do you want to delete?'),
+                    title: const Text('Delete?'),
+                    content: const Text('Do you want to delete?'),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('No'),
+                        child: const Text('No'),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -226,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onRefresh();
                           Navigator.pop(context);
                         },
-                        child: Text('Yes'),
+                        child: const Text('Yes'),
                       )
                     ],
                   );
@@ -236,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
               print('hello');
             },
             icon: Icons.delete,
-            backgroundColor: Color(0xFFEBF8F6),
+            backgroundColor: const Color(0xFFEBF8F6),
             foregroundColor: Colors.red,
           ),
         ],
@@ -274,11 +265,23 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 80.0,
       color: Colors.grey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(18.0),
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(80.0),
-            color: Colors.white,
+          // color: h,
+          child: TextField(
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              hintStyle: TextStyle(color: Colors.grey[800]),
+              hintText: 'Search Contact',
+              contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+            ),
           ),
         ),
       ),
@@ -289,30 +292,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       height: 70.0,
       color: const Color(0xff32baa5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(), //to make it spaceBetween
-          const Text(
-            'My Contacts',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(21.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(), //to make it spaceBetween
+            const Text(
+              'My Contacts',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: Colors.white,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              // fetchContact();
-              contactBloc.add(const ContactRefreshButtonPressed());
-              onRefresh();
-            },
-            child: Icon(
-              Icons.refresh,
-              color: Colors.white,
+            InkWell(
+              onTap: () {
+                contactBloc.add(const ContactRefreshButtonPressed());
+                onRefresh();
+              },
+              child: const Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
