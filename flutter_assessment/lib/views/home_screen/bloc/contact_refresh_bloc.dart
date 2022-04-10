@@ -8,16 +8,13 @@ import 'package:flutter_assessment/services/contact_model.dart';
 part 'contact_refresh_event.dart';
 part 'contact_refresh_state.dart';
 
-class ContactRefreshBloc
-    extends Bloc<ContactRefreshEvent, ContactRefreshModel> {
+class ContactRefreshBloc extends Bloc<ContactRefreshEvent, ContactRefreshModel> {
   ContactRefreshBloc() : super(ContactRefreshModel.initial()) {
     on<ContactRefreshButtonPressed>(_onContactRefreshPressed);
-    on<ContactRefreshFromDatabaseTriggered>(
-        _onContactRefreshFromDatabaseTriggered);
+    on<ContactRefreshFromDatabaseTriggered>(_onContactRefreshFromDatabaseTriggered);
   }
 
-  _onContactRefreshPressed(
-      ContactRefreshButtonPressed event, Emitter emit) async {
+  _onContactRefreshPressed(ContactRefreshButtonPressed event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
@@ -25,8 +22,7 @@ class ContactRefreshBloc
         ),
       );
 
-      List<Contact> contactListFromApi =
-          await ContactRepoInterface().getContactListFromApi();
+      List<Contact> contactListFromApi = await ContactRepoInterface().getContactListFromApi();
 
       await ContactRepoInterface().insertContactList(contactListFromApi);
 
@@ -37,8 +33,7 @@ class ContactRefreshBloc
         ),
       );
 
-      List<Contact> contactListFromDatabase =
-          await ContactRepoInterface().getContactListFromDatabase();
+      List<Contact> contactListFromDatabase = await ContactRepoInterface().getContactListFromDatabase();
 
       emit(
         state.copyWith(
@@ -49,15 +44,13 @@ class ContactRefreshBloc
     } catch (e) {
       emit(
         state.copyWith(
-          newContactRefreshState:
-              ContactRefreshError(message: 'Contact load failed.'),
+          newContactRefreshState: ContactRefreshError(message: 'Contact load failed.'),
         ),
       );
     }
   }
 
-  _onContactRefreshFromDatabaseTriggered(
-      ContactRefreshFromDatabaseTriggered event, Emitter emit) async {
+  _onContactRefreshFromDatabaseTriggered(ContactRefreshFromDatabaseTriggered event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
@@ -65,8 +58,7 @@ class ContactRefreshBloc
         ),
       );
 
-      List<Contact> contactListFromDatabase =
-          await ContactRepoInterface().getContactListFromDatabase();
+      List<Contact> contactListFromDatabase = await ContactRepoInterface().getContactListFromDatabase();
 
       emit(
         state.copyWith(
@@ -77,8 +69,7 @@ class ContactRefreshBloc
     } catch (e) {
       emit(
         state.copyWith(
-          newContactRefreshState:
-              ContactRefreshError(message: 'Fetching from database failed.'),
+          newContactRefreshState: ContactRefreshError(message: 'Fetching from database failed.'),
         ),
       );
     }
