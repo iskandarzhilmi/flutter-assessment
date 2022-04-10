@@ -68,9 +68,6 @@ class ContactRefreshBloc
       List<Contact> contactListFromDatabase =
           await ContactRepoInterface().getContactListFromDatabase();
 
-      //Artificial delay
-      // await Future.delayed(Duration(seconds: 1));
-
       emit(
         state.copyWith(
           newContactRefreshState: ContactRefreshLoaded(),
