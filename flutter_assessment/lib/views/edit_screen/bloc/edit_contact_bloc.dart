@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 part 'edit_contact_event.dart';
 part 'edit_contact_state.dart';
 
+//TODO: Combine with ContactRefreshBLoC
 //TODO: Replace the name of the bloc and related to it with suitable term.
 class EditContactBloc extends Bloc<EditContactEvent, EditContactModel> {
   EditContactBloc() : super(EditContactModel.initial()) {
