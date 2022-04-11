@@ -10,11 +10,11 @@ part 'contact_refresh_state.dart';
 
 class ContactRefreshBloc extends Bloc<ContactRefreshEvent, ContactRefreshModel> {
   ContactRefreshBloc() : super(ContactRefreshModel.initial()) {
-    on<ContactRefreshButtonPressed>(_onContactRefreshPressed);
+    on<ContactRefreshFromApiTriggered>(_onContactRefreshFromApiTriggered);
     on<ContactRefreshFromDatabaseTriggered>(_onContactRefreshFromDatabaseTriggered);
   }
 
-  _onContactRefreshPressed(ContactRefreshButtonPressed event, Emitter emit) async {
+  _onContactRefreshFromApiTriggered(ContactRefreshFromApiTriggered event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
@@ -33,7 +33,8 @@ class ContactRefreshBloc extends Bloc<ContactRefreshEvent, ContactRefreshModel> 
         ),
       );
 
-      List<Contact> contactListFromDatabase = await ContactRepoInterface().getContactListFromDatabase();
+      List<Contact> contactListFromDatabase =
+          await ContactRepoInterface().getContactListFromDatabase();
 
       emit(
         state.copyWith(
@@ -50,7 +51,8 @@ class ContactRefreshBloc extends Bloc<ContactRefreshEvent, ContactRefreshModel> 
     }
   }
 
-  _onContactRefreshFromDatabaseTriggered(ContactRefreshFromDatabaseTriggered event, Emitter emit) async {
+  _onContactRefreshFromDatabaseTriggered(
+      ContactRefreshFromDatabaseTriggered event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
@@ -58,7 +60,8 @@ class ContactRefreshBloc extends Bloc<ContactRefreshEvent, ContactRefreshModel> 
         ),
       );
 
-      List<Contact> contactListFromDatabase = await ContactRepoInterface().getContactListFromDatabase();
+      List<Contact> contactListFromDatabase =
+          await ContactRepoInterface().getContactListFromDatabase();
 
       emit(
         state.copyWith(

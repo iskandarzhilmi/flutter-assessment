@@ -15,4 +15,6 @@ class EditContactSubmitted extends EditContactEvent {
 
   @override
   List<Object?> get props => [contact];
+
+  //how can i sharpen my axe
 }

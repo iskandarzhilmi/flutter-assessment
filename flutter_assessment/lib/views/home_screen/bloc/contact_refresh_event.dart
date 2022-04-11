@@ -7,11 +7,10 @@ abstract class ContactRefreshEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ContactRefreshButtonPressed extends ContactRefreshEvent {
-  const ContactRefreshButtonPressed();
+class ContactRefreshFromApiTriggered extends ContactRefreshEvent {
+  const ContactRefreshFromApiTriggered();
 }
 
 class ContactRefreshFromDatabaseTriggered extends ContactRefreshEvent {
   const ContactRefreshFromDatabaseTriggered();
 }
-
