@@ -89,7 +89,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : const Icon(Icons.star_border),
               ),
             ),
-            Text(contact.firstName + ' ' + contact.lastName),
+            SizedBox(height: 14),
+            Text(
+              contact.firstName + ' ' + contact.lastName,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 14),
             Container(
               width: double.infinity,
               color: Colors.grey,
@@ -110,19 +117,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(22.0),
               child: InkWell(
                 onTap: () {
                   launch('mailto:' + contact.email);
                 },
                 child: Container(
-                  height: 60.0,
+                  height: 47.0,
                   decoration: BoxDecoration(
                     color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(100.0),
                   ),
                   child: const Center(
-                    child: Text('Send Email'),
+                    child: Text(
+                      'Send Email',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
               ),

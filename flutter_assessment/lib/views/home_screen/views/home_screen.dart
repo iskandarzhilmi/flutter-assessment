@@ -39,21 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void fetchContact() async {
-    DatabaseHelper().deleteAllContact();
-
-    Response response =
-        await get(Uri.parse('https://reqres.in/api/users?page=1'));
-    Map<String, dynamic> data;
-
-    for (int i = 0; i < 6; i++) {
-      data = jsonDecode(response.body)['data'][i];
-      Contact contact = Contact.fromMap(data);
-      DatabaseHelper().insertContact(contact);
-    }
-    onRefresh();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -323,5 +308,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// BlocBuilder<ContactBloc, ContactStateModel>
