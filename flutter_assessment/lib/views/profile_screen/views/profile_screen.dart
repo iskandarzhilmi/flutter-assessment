@@ -89,14 +89,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : const Icon(Icons.star_border),
               ),
             ),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Text(
               contact.firstName + ' ' + contact.lastName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             Container(
               width: double.infinity,
               color: Colors.grey,

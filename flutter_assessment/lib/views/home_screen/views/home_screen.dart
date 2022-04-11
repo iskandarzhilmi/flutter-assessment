@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Contact>> contactListFuture;
   bool favouriteSelected = false;
   String textFieldValue = '';
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -109,18 +110,34 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView.builder(
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          if (favouriteSelected) {
-            if (items[index].favourite == 'true') {
-              return contactSlidable(items[index]);
+          Contact contact = items[index];
+          // String text = textEditingController.text;
+          String fullName = '${contact.firstName} ${contact.lastName}';
+
+          if (textFieldValue.isEmpty) {
+            return checkFavourite(contact);
+          } else {
+            if (fullName.toLowerCase().contains(textFieldValue.toLowerCase())) {
+              return checkFavourite(contact);
             } else {
               return Container();
             }
-          } else {
-            return contactSlidable(items[index]);
           }
         },
       ),
     );
+  }
+
+  Widget checkFavourite(Contact contact) {
+    if (favouriteSelected) {
+      if (contact.favourite == 'true') {
+        return contactSlidable(contact);
+      } else {
+        return Container();
+      }
+    } else {
+      return contactSlidable(contact);
+    }
   }
 
   Slidable contactSlidable(Contact contact) {
@@ -255,6 +272,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           // color: h,
           child: TextField(
+            // controller: textEditingController,
+            onChanged: (text) {
+              setState(() {
+                textFieldValue = text;
+              });
+
+              print(text);
+            },
             style: const TextStyle(
               fontSize: 20,
             ),

@@ -40,7 +40,6 @@ class DatabaseHelper {
   Future<List<Contact>> getContactList() async {
     final db = await initializeDB();
     final List<Map<String, dynamic>> queryResult = await db.query('contact');
-    print(queryResult);
     return queryResult
         .map(
           (data) => Contact(
