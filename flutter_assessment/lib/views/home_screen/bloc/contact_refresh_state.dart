@@ -8,9 +8,9 @@ class ContactRefreshModel extends Equatable {
 
   const ContactRefreshModel({
     required this.contactListFromApi,
-    required this.contactRefreshState,
-    this.submittedContact,
     required this.contactListFromDatabase,
+    this.submittedContact,
+    required this.contactRefreshState,
   });
 
   @override
@@ -21,7 +21,6 @@ class ContactRefreshModel extends Equatable {
     return ContactRefreshModel(
       contactListFromApi: const [],
       contactListFromDatabase: const [],
-      // submittedContact: Contact(),
       contactRefreshState: ContactRefreshLoading(),
     );
   }
