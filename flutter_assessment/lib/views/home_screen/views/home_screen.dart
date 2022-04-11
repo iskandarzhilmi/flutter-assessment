@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
 import 'package:flutter_assessment/views/profile_screen/views/profile_screen.dart';
 import '../../../helpers/database_helper.dart';
@@ -32,14 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> onRefresh() async {
     setState(() {
-      context.read<ContactRefreshBloc>().add(const ContactRefreshFromDatabaseTriggered());
+      context
+          .read<ContactRefreshBloc>()
+          .add(const ContactRefreshFromDatabaseTriggered());
     });
   }
 
   void fetchContact() async {
     DatabaseHelper().deleteAllContact();
 
-    Response response = await get(Uri.parse('https://reqres.in/api/users?page=1'));
+    Response response =
+        await get(Uri.parse('https://reqres.in/api/users?page=1'));
     Map<String, dynamic> data;
 
     for (int i = 0; i < 6; i++) {
@@ -73,9 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ContactNavigationBar(),
                     Expanded(
-                      child: BlocBuilder<ContactRefreshBloc, ContactRefreshModel>(
+                      child:
+                          BlocBuilder<ContactRefreshBloc, ContactRefreshModel>(
                         builder: (context, state) {
-                          if (state.contactRefreshState is ContactRefreshLoadingFromApi) {
+                          if (state.contactRefreshState
+                              is ContactRefreshLoadingFromApi) {
                             return const Center(
                               child: CircularProgressIndicator(),
                               // child: Text('Loading from API'),
@@ -86,9 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: CircularProgressIndicator(),
                               // child: Text('Loading from database'),
                             );
-                          } else if (state.contactRefreshState is ContactRefreshError) {
-                            return Text((state.contactRefreshState as ContactRefreshError).message);
-                          } else if (state.contactRefreshState is ContactRefreshLoaded) {
+                          } else if (state.contactRefreshState
+                              is ContactRefreshError) {
+                            return Text((state.contactRefreshState
+                                    as ContactRefreshError)
+                                .message);
+                          } else if (state.contactRefreshState
+                              is ContactRefreshLoaded) {
                             return contactListView(
                               state.contactListFromDatabase,
                             );
@@ -282,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Container ContactHeader({required ContactRefreshBloc contactBloc}) {
     return Container(
       height: 70.0,
-      color: const Color(0xff32baa5),
+      color: kPrimaryColor,
       child: Padding(
         padding: const EdgeInsets.all(21.0),
         child: Row(

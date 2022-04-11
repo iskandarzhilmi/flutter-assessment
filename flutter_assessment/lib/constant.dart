@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:flutter_assessment/helpers/api_helper.dart';
 
 ApiHelperInterface apiHelperInterface = ApiHelperInterface(
@@ -7,3 +9,5 @@ ApiHelperInterface apiHelperInterface = ApiHelperInterface(
 
 const String kReqresBaseUrl = 'https://reqres.in';
 const String kReqresApiVersion = '/api';
+const Color kPrimaryColor = Color(0xff32baa5);
+const Color kTextColor = Colors.white;

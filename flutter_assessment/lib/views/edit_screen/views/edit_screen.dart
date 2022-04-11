@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home_screen/views/home_screen.dart';
@@ -40,7 +41,7 @@ class _EditScreenState extends State<EditScreen> {
             children: [
               Container(
                 height: 70.0,
-                color: Colors.green,
+                color: kPrimaryColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -110,7 +111,7 @@ class _EditScreenState extends State<EditScreen> {
                         child: Container(
                           height: 60.0,
                           decoration: BoxDecoration(
-                            color: Colors.green,
+                            color: kPrimaryColor,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: const Center(

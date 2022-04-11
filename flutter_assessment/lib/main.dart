@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'views/home_screen/views/home_screen.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+          primaryColor: kPrimaryColor,
           textTheme: GoogleFonts.ralewayTextTheme(
             Theme.of(context).textTheme,
           ),

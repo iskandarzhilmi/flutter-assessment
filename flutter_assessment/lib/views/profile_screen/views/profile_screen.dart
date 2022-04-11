@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/views/edit_screen/views/edit_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import '../../../helpers/database_helper.dart';
@@ -37,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Container(
               height: 70.0,
-              color: Colors.green,
+              color: kPrimaryColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Container(
                   height: 60.0,
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: const Center(
