@@ -14,3 +14,12 @@ class ContactRefreshFromApiTriggered extends ContactRefreshEvent {
 class ContactRefreshFromDatabaseTriggered extends ContactRefreshEvent {
   const ContactRefreshFromDatabaseTriggered();
 }
+
+class ContactEditSubmitted extends ContactRefreshEvent {
+  const ContactEditSubmitted(this.submittedContact);
+
+  final Contact submittedContact;
+
+  @override
+  List<Object?> get props => [submittedContact];
+}

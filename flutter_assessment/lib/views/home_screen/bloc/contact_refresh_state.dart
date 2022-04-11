@@ -3,11 +3,13 @@ part of 'contact_refresh_bloc.dart';
 class ContactRefreshModel extends Equatable {
   final List<Contact> contactListFromApi;
   final List<Contact> contactListFromDatabase;
+  final Contact? submittedContact;
   final ContactRefreshState contactRefreshState;
 
   const ContactRefreshModel({
     required this.contactListFromApi,
     required this.contactRefreshState,
+    this.submittedContact,
     required this.contactListFromDatabase,
   });
 
@@ -19,6 +21,7 @@ class ContactRefreshModel extends Equatable {
     return ContactRefreshModel(
       contactListFromApi: const [],
       contactListFromDatabase: const [],
+      // submittedContact: Contact(),
       contactRefreshState: ContactRefreshLoading(),
     );
   }
@@ -26,12 +29,14 @@ class ContactRefreshModel extends Equatable {
   ContactRefreshModel copyWith({
     List<Contact>? newContactListFromApi,
     List<Contact>? newContactListFromDatabase,
+    Contact? newSubmittedContact,
     ContactRefreshState? newContactRefreshState,
   }) {
     return ContactRefreshModel(
       contactListFromApi: newContactListFromApi ?? contactListFromApi,
       contactListFromDatabase:
           newContactListFromDatabase ?? contactListFromDatabase,
+      submittedContact: newSubmittedContact ?? submittedContact,
       contactRefreshState: newContactRefreshState ?? contactRefreshState,
     );
   }
