@@ -23,3 +23,12 @@ class ContactListingEditSubmitted extends ContactListingEvent {
   @override
   List<Object?> get props => [submittedContact];
 }
+
+class ContactListingDelete extends ContactListingEvent {
+  const ContactListingDelete(this.contactId);
+
+  final int contactId;
+
+  @override
+  List<Object?> get props => [contactId];
+}

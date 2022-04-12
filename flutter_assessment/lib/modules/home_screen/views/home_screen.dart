@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_listing_bloc.dart';
-import 'package:flutter_assessment/views/profile_screen/views/profile_screen.dart';
+import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc.dart';
+import 'package:flutter_assessment/modules/profile_screen/views/profile_screen.dart';
 import '../../../helpers/database_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

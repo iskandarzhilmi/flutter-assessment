@@ -8,6 +8,7 @@ import 'package:flutter_assessment/services/contact_model.dart';
 part 'contact_listing_event.dart';
 part 'contact_listing_state.dart';
 
+//TODO: Add delete in the bloc
 class ContactListingBloc
     extends Bloc<ContactListingEvent, ContactListingModel> {
   ContactListingBloc() : super(ContactListingModel.initial()) {
@@ -15,6 +16,7 @@ class ContactListingBloc
     on<ContactListingFromDatabaseTriggered>(
         _onContactListingFromDatabaseTriggered);
     on<ContactListingEditSubmitted>(_onContactListingEditSubmitted);
+    on<ContactListingDelete>(_onContactListingDelete);
   }
 
   _onContactListingFromApiTriggered(
@@ -104,6 +106,18 @@ class ContactListingBloc
         contact.email,
       );
     } catch (e) {
+      emit(
+        state.copyWith(
+          newContactListingState: ContactListingError(
+            message: 'Contact edit submission failed.',
+          ),
+        ),
+      );
+    }
+  }
+
+  _onContactListingDelete(ContactListingDelete event, Emitter emit) async {
+    try {} catch (e) {
       emit(
         state.copyWith(
           newContactListingState: ContactListingError(
