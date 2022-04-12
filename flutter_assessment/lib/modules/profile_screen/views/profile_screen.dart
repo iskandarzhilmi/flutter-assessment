@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 14),
             Text(
               contact.firstName + ' ' + contact.lastName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
