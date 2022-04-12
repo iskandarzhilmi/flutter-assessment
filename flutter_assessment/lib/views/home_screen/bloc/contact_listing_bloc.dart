@@ -5,25 +5,24 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 
-part 'contact_refresh_event.dart';
-part 'contact_refresh_state.dart';
+part 'contact_listing_event.dart';
+part 'contact_listing_state.dart';
 
-//TODO: Change this and other's name to ContactListing
-class ContactRefreshBloc
-    extends Bloc<ContactRefreshEvent, ContactRefreshModel> {
-  ContactRefreshBloc() : super(ContactRefreshModel.initial()) {
-    on<ContactRefreshFromApiTriggered>(_onContactRefreshFromApiTriggered);
-    on<ContactRefreshFromDatabaseTriggered>(
-        _onContactRefreshFromDatabaseTriggered);
-    on<ContactEditSubmitted>(_onContactEditSubmitted);
+class ContactListingBloc
+    extends Bloc<ContactListingEvent, ContactListingModel> {
+  ContactListingBloc() : super(ContactListingModel.initial()) {
+    on<ContactListingFromApiTriggered>(_onContactListingFromApiTriggered);
+    on<ContactListingFromDatabaseTriggered>(
+        _onContactListingFromDatabaseTriggered);
+    on<ContactListingEditSubmitted>(_onContactListingEditSubmitted);
   }
 
-  _onContactRefreshFromApiTriggered(
-      ContactRefreshFromApiTriggered event, Emitter emit) async {
+  _onContactListingFromApiTriggered(
+      ContactListingFromApiTriggered event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
-          newContactRefreshState: ContactRefreshLoading(),
+          newContactListingState: ContactListingLoading(),
         ),
       );
 
@@ -35,7 +34,7 @@ class ContactRefreshBloc
       emit(
         state.copyWith(
           newContactListFromApi: contactListFromApi,
-          newContactRefreshState: ContactRefreshLoadingFromDatabase(),
+          newContactListingState: ContactListingLoadingFromDatabase(),
         ),
       );
 
@@ -45,25 +44,25 @@ class ContactRefreshBloc
       emit(
         state.copyWith(
           newContactListFromDatabase: contactListFromDatabase,
-          newContactRefreshState: ContactRefreshLoaded(),
+          newContactListingState: ContactListingLoaded(),
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          newContactRefreshState:
-              ContactRefreshError(message: 'Contact load failed.'),
+          newContactListingState:
+              ContactListingError(message: 'Contact load failed.'),
         ),
       );
     }
   }
 
-  _onContactRefreshFromDatabaseTriggered(
-      ContactRefreshFromDatabaseTriggered event, Emitter emit) async {
+  _onContactListingFromDatabaseTriggered(
+      ContactListingFromDatabaseTriggered event, Emitter emit) async {
     try {
       emit(
         state.copyWith(
-          newContactRefreshState: ContactRefreshLoadingFromDatabase(),
+          newContactListingState: ContactListingLoadingFromDatabase(),
         ),
       );
 
@@ -72,27 +71,28 @@ class ContactRefreshBloc
 
       emit(
         state.copyWith(
-          newContactRefreshState: ContactRefreshLoaded(),
+          newContactListingState: ContactListingLoaded(),
           newContactListFromDatabase: contactListFromDatabase,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          newContactRefreshState:
-              ContactRefreshError(message: 'Fetching from database failed.'),
+          newContactListingState:
+              ContactListingError(message: 'Fetching from database failed.'),
         ),
       );
     }
   }
 
-  _onContactEditSubmitted(ContactEditSubmitted event, Emitter emit) async {
+  _onContactListingEditSubmitted(
+      ContactListingEditSubmitted event, Emitter emit) async {
     try {
       Contact contact = event.submittedContact;
 
       emit(
         state.copyWith(
-          newContactRefreshState: ContactRefreshLoading(),
+          newContactListingState: ContactListingLoading(),
           newSubmittedContact: event.submittedContact,
         ),
       );
@@ -106,7 +106,7 @@ class ContactRefreshBloc
     } catch (e) {
       emit(
         state.copyWith(
-          newContactRefreshState: ContactRefreshError(
+          newContactListingState: ContactListingError(
             message: 'Contact edit submission failed.',
           ),
         ),

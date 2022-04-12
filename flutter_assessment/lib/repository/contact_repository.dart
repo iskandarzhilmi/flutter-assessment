@@ -34,7 +34,6 @@ class ContactRepo implements ContactRepoInterface {
     Response response =
         await get(Uri.parse('https://reqres.in/api/users?page=1'));
     Map<String, dynamic> data;
-    //TODO: Try using a safer way instead of using 6 as max.
     for (int i = 0; i < 6; i++) {
       data = jsonDecode(response.body)['data'][i];
       Contact contact = Contact.fromMap(data);

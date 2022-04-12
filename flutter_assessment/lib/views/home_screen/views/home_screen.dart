@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_listing_bloc.dart';
 import 'package:flutter_assessment/views/profile_screen/views/profile_screen.dart';
 import '../../../helpers/database_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> onRefresh() async {
     setState(() {
       context
-          .read<ContactRefreshBloc>()
-          .add(const ContactRefreshFromDatabaseTriggered());
+          .read<ContactListingBloc>()
+          .add(const ContactListingFromDatabaseTriggered());
     });
   }
 
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             ContactHeader(
-              contactBloc: context.read<ContactRefreshBloc>(),
+              contactBloc: context.read<ContactListingBloc>(),
             ),
             SearchTextField(),
             Expanded(
@@ -64,27 +64,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ContactNavigationBar(),
                     Expanded(
                       child:
-                          BlocBuilder<ContactRefreshBloc, ContactRefreshModel>(
+                          BlocBuilder<ContactListingBloc, ContactListingModel>(
                         builder: (context, state) {
-                          if (state.contactRefreshState
-                              is ContactRefreshLoadingFromApi) {
+                          if (state.contactListingState
+                              is ContactListingLoadingFromApi) {
                             return const Center(
                               child: CircularProgressIndicator(),
                               // child: Text('Loading from API'),
                             );
-                          } else if (state.contactRefreshState
-                              is ContactRefreshLoadingFromDatabase) {
+                          } else if (state.contactListingState
+                              is ContactListingLoadingFromDatabase) {
                             return const Center(
                               child: CircularProgressIndicator(),
                               // child: Text('Loading from database'),
                             );
-                          } else if (state.contactRefreshState
-                              is ContactRefreshError) {
-                            return Text((state.contactRefreshState
-                                    as ContactRefreshError)
+                          } else if (state.contactListingState
+                              is ContactListingError) {
+                            return Text((state.contactListingState
+                                    as ContactListingError)
                                 .message);
-                          } else if (state.contactRefreshState
-                              is ContactRefreshLoaded) {
+                          } else if (state.contactListingState
+                              is ContactListingLoaded) {
                             return contactListView(
                               state.contactListFromDatabase,
                             );
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container ContactHeader({required ContactRefreshBloc contactBloc}) {
+  Container ContactHeader({required ContactListingBloc contactBloc}) {
     return Container(
       height: 70.0,
       color: kPrimaryColor,
@@ -319,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             InkWell(
               onTap: () {
-                contactBloc.add(const ContactRefreshFromApiTriggered());
+                contactBloc.add(const ContactListingFromApiTriggered());
                 onRefresh();
               },
               child: const Icon(

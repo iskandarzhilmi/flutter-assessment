@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
-import 'package:flutter_assessment/views/home_screen/bloc/contact_refresh_bloc.dart';
+import 'package:flutter_assessment/views/home_screen/bloc/contact_listing_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home_screen/views/home_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
@@ -92,8 +92,8 @@ class _EditScreenState extends State<EditScreen> {
                       const SizedBox(height: 20.0),
                       InkWell(
                         onTap: () {
-                          context.read<ContactRefreshBloc>().add(
-                                ContactEditSubmitted(
+                          context.read<ContactListingBloc>().add(
+                                ContactListingEditSubmitted(
                                   Contact(
                                     id: contact.id,
                                     email: email,
