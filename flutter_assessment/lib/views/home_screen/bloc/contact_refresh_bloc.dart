@@ -8,6 +8,7 @@ import 'package:flutter_assessment/services/contact_model.dart';
 part 'contact_refresh_event.dart';
 part 'contact_refresh_state.dart';
 
+//TODO: Change this and other's name to ContactListing
 class ContactRefreshBloc
     extends Bloc<ContactRefreshEvent, ContactRefreshModel> {
   ContactRefreshBloc() : super(ContactRefreshModel.initial()) {

@@ -115,10 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
           String fullName = '${contact.firstName} ${contact.lastName}';
 
           if (textFieldValue.isEmpty) {
-            return checkFavourite(contact);
+            return contactIsFavourite(contact);
           } else {
             if (fullName.toLowerCase().contains(textFieldValue.toLowerCase())) {
-              return checkFavourite(contact);
+              return contactIsFavourite(contact);
             } else {
               return Container();
             }
@@ -128,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget checkFavourite(Contact contact) {
+  Widget contactIsFavourite(Contact contact) {
     if (favouriteSelected) {
       if (contact.favourite == 'true') {
         return contactSlidable(contact);

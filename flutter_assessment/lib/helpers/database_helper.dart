@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../services/contact_model.dart';
 
+//TODO: combine database helper with contact repo
 class DatabaseHelper {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
