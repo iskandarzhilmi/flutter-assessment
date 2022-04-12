@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc.dart';
+import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'modules/home_screen/views/home_screen.dart';
-import 'helpers/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper().initializeDB();
+  await ContactRepoInterface().initializeDB();
   runApp(const MyApp());
 }
 

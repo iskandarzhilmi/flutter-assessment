@@ -4,7 +4,6 @@ import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home_screen/views/home_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
-import '../../../helpers/database_helper.dart';
 
 class EditScreen extends StatefulWidget {
   EditScreen(this.contact, {Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/edit_screen/views/edit_screen.dart';
+import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
-import '../../../helpers/database_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     favourite = true;
                   }
 
-                  DatabaseHelper().toggleFavourite(contact.id);
+                  ContactRepoInterface().toggleFavourite(contact.id);
                 });
               },
               child: CircleAvatar(

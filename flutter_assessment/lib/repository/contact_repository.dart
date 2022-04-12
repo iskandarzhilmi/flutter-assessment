@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:sqflite/sqflite.dart';
-import '../helpers/database_helper.dart';
 import 'package:http/http.dart';
 import 'package:path/path.dart';
 

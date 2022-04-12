@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc.dart';
 import 'package:flutter_assessment/modules/profile_screen/views/profile_screen.dart';
-import '../../../helpers/database_helper.dart';
+import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
@@ -216,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          DatabaseHelper().deleteContact(contact.id);
+                          ContactRepoInterface().deleteContact(contact.id);
                           onRefresh();
                           Navigator.pop(context);
                         },
