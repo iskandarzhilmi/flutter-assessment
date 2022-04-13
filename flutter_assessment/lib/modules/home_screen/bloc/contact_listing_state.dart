@@ -5,17 +5,24 @@ class ContactListingModel extends Equatable {
   final List<Contact> contactListFromDatabase;
   final Contact? submittedContact;
   final ContactListingState contactListingState;
+  final int? contactIdToDelete;
 
   const ContactListingModel({
     required this.contactListFromApi,
     required this.contactListFromDatabase,
     this.submittedContact,
     required this.contactListingState,
+    this.contactIdToDelete,
   });
 
   @override
-  List<Object?> get props =>
-      [contactListFromApi, contactListFromDatabase, ContactListingState];
+  List<Object?> get props => [
+        contactListFromApi,
+        contactListFromDatabase,
+        submittedContact,
+        contactIdToDelete,
+        contactListingState
+      ];
 
   factory ContactListingModel.initial() {
     return ContactListingModel(
@@ -29,6 +36,7 @@ class ContactListingModel extends Equatable {
     List<Contact>? newContactListFromApi,
     List<Contact>? newContactListFromDatabase,
     Contact? newSubmittedContact,
+    int? newContactIdToDelete,
     ContactListingState? newContactListingState,
   }) {
     return ContactListingModel(
@@ -36,6 +44,7 @@ class ContactListingModel extends Equatable {
       contactListFromDatabase:
           newContactListFromDatabase ?? contactListFromDatabase,
       submittedContact: newSubmittedContact ?? submittedContact,
+      contactIdToDelete: newContactIdToDelete ?? contactIdToDelete,
       contactListingState: newContactListingState ?? contactListingState,
     );
   }

@@ -3,12 +3,14 @@ import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/edit_screen/views/edit_screen.dart';
 import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
+import 'package:flutter_assessment/widgets/header.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const String id = 'profile_screen';
 
-  ProfileScreen(this.contact);
+  const ProfileScreen(this.contact);
 
   final Contact contact;
 
@@ -36,23 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            Container(
-              height: 70.0,
-              color: kPrimaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.arrow_back),
-                  ),
-                  const Text('Profile'),
-                  Container(),
-                ],
-              ),
-            ),
+            ProfileHeader(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -69,24 +55,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  if (favourite) {
-                    favourite = false;
-                  } else {
-                    favourite = true;
-                  }
-
-                  ContactRepoInterface().toggleFavourite(contact.id);
-                });
-              },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(contact.avatar),
-                radius: 50.0,
-                child: favourite
-                    ? const Icon(Icons.star)
-                    : const Icon(Icons.star_border),
+            Container(
+              height: 100.0,
+              width: 100.0,
+              child: Center(
+                child: Stack(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (favourite) {
+                            favourite = false;
+                          } else {
+                            favourite = true;
+                          }
+                          ContactRepoInterface().toggleFavourite(contact.id);
+                        });
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(contact.avatar),
+                        radius: 50.0,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: favourite
+                          ? const Icon(
+                              Icons.star,
+                              color: favouriteStarColor,
+                            )
+                          : const Icon(
+                              Icons.star_border,
+                              color: favouriteStarColor,
+                            ),
+                    )
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 14),

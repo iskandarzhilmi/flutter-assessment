@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: kPrimaryColor,
           child: const Icon(Icons.add),
           onPressed: () {},
         ),
@@ -61,7 +62,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Column(
                   children: [
-                    ContactNavigationBar(),
+                    Row(
+                      children: [
+                        ChoiceChip(
+                          selected: !favouriteSelected,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              favouriteSelected = false;
+                            });
+                          },
+                          label: Text('All'),
+                        ),
+                        ChoiceChip(
+                          selected: favouriteSelected,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              favouriteSelected = true;
+                            });
+                          },
+                          label: Text('Favourite'),
+                        ),
+                      ],
+                    ),
                     Expanded(
                       child:
                           BlocBuilder<ContactListingBloc, ContactListingModel>(
@@ -70,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               is ContactListingLoadingFromApi) {
                             return const Center(
                               child: CircularProgressIndicator(),
-                              // child: Text('Loading from API'),
                             );
                           } else if (state.contactListingState
                               is ContactListingLoadingFromDatabase) {
@@ -198,6 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: const Color(0xFFEBF8F6),
             foregroundColor: Colors.yellow,
           ),
+          VerticalDivider(
+              // width: 0,
+              // thickness: 5,
+              ),
           SlidableAction(
             onPressed: (context) {
               showDialog(
@@ -216,7 +241,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          ContactRepoInterface().deleteContact(contact.id);
+                          context
+                              .read<ContactListingBloc>()
+                              .add(ContactListingDelete(contact.id));
                           onRefresh();
                           Navigator.pop(context);
                         },
@@ -226,8 +253,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               );
-
-              print('hello');
             },
             icon: Icons.delete,
             backgroundColor: const Color(0xFFEBF8F6),
@@ -277,8 +302,6 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 textFieldValue = text;
               });
-
-              print(text);
             },
             style: const TextStyle(
               fontSize: 20,
@@ -299,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  //TODO: Put this in UI file and rename it as ScreenHEader
   Container ContactHeader({required ContactListingBloc contactBloc}) {
     return Container(
       height: 70.0,

@@ -117,14 +117,18 @@ class ContactListingBloc
   }
 
   _onContactListingDelete(ContactListingDelete event, Emitter emit) async {
-    try {} catch (e) {
+    try {
+      await ContactRepoInterface().deleteContact(event.contactIdToDelete);
+    } catch (e) {
       emit(
         state.copyWith(
           newContactListingState: ContactListingError(
-            message: 'Contact edit submission failed.',
+            message: 'Contact delete submission failed.',
           ),
         ),
       );
     }
   }
+
+  //TODO: Add toggleFavourite here.
 }

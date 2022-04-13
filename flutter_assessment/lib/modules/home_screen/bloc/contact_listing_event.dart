@@ -25,10 +25,10 @@ class ContactListingEditSubmitted extends ContactListingEvent {
 }
 
 class ContactListingDelete extends ContactListingEvent {
-  const ContactListingDelete(this.contactId);
+  const ContactListingDelete(this.contactIdToDelete);
 
-  final int contactId;
+  final int contactIdToDelete;
 
   @override
-  List<Object?> get props => [contactId];
+  List<Object?> get props => [contactIdToDelete];
 }

@@ -11,3 +11,4 @@ const String kReqresBaseUrl = 'https://reqres.in';
 const String kReqresApiVersion = '/api';
 const Color kPrimaryColor = Color(0xff32baa5);
 const Color kTextColor = Colors.white;
+const favouriteStarColor = Color(0xffF2C94C);
