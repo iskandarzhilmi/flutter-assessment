@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc.dart';
+import 'package:flutter_assessment/widgets/header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../home_screen/views/home_screen.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
@@ -38,23 +39,7 @@ class _EditScreenState extends State<EditScreen> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              Container(
-                height: 70.0,
-                color: kPrimaryColor,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.arrow_back),
-                    ),
-                    const Text('Profile'),
-                    Container(),
-                  ],
-                ),
-              ),
+              ProfileHeader(),
               SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -62,7 +47,12 @@ class _EditScreenState extends State<EditScreen> {
                     children: [
                       const SizedBox(height: 20.0),
                       CircleAvatar(
-                        backgroundImage: NetworkImage(contact.avatar),
+                        backgroundColor: kPrimaryColor,
+                        radius: 62.5,
+                        child: CircleAvatar(
+                          radius: 57.5,
+                          backgroundImage: NetworkImage(contact.avatar),
+                        ),
                       ),
                       const SizedBox(height: 20.0),
                       ProfileTextField(
@@ -82,7 +72,7 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                       const SizedBox(height: 20.0),
                       ProfileTextField(
-                        labelText: 'First Name',
+                        labelText: 'Email',
                         initialValue: contact.email,
                         onChanged: (value) {
                           email = value;
@@ -114,7 +104,12 @@ class _EditScreenState extends State<EditScreen> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: const Center(
-                            child: Text('Done'),
+                            child: Text(
+                              'Done',
+                              style: TextStyle(
+                                color: kTextColor,
+                              ),
+                            ),
                           ),
                         ),
                       ),

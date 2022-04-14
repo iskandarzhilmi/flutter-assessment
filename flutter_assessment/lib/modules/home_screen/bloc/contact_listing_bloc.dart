@@ -8,7 +8,6 @@ import 'package:flutter_assessment/services/contact_model.dart';
 part 'contact_listing_event.dart';
 part 'contact_listing_state.dart';
 
-//TODO: Add delete in the bloc
 class ContactListingBloc
     extends Bloc<ContactListingEvent, ContactListingModel> {
   ContactListingBloc() : super(ContactListingModel.initial()) {
@@ -17,6 +16,7 @@ class ContactListingBloc
         _onContactListingFromDatabaseTriggered);
     on<ContactListingEditSubmitted>(_onContactListingEditSubmitted);
     on<ContactListingDelete>(_onContactListingDelete);
+    on<ContactListingToggleFavourite>(_onContactListingToggleFavourite);
   }
 
   _onContactListingFromApiTriggered(
@@ -24,7 +24,7 @@ class ContactListingBloc
     try {
       emit(
         state.copyWith(
-          newContactListingState: ContactListingLoading(),
+          newContactListingState: ContactListingLoadingFromApi(),
         ),
       );
 
@@ -94,7 +94,7 @@ class ContactListingBloc
 
       emit(
         state.copyWith(
-          newContactListingState: ContactListingLoading(),
+          newContactListingState: ContactListingLoadingFromDatabase(),
           newSubmittedContact: event.submittedContact,
         ),
       );
@@ -118,7 +118,18 @@ class ContactListingBloc
 
   _onContactListingDelete(ContactListingDelete event, Emitter emit) async {
     try {
-      await ContactRepoInterface().deleteContact(event.contactIdToDelete);
+      emit(
+        state.copyWith(
+          newContactListingState: ContactListingLoadingDelete(),
+        ),
+      );
+      await ContactRepoInterface().deleteContact(event.contactIdSelected);
+
+      emit(
+        state.copyWith(
+          newContactListingState: ContactListingLoaded(),
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(
@@ -130,5 +141,34 @@ class ContactListingBloc
     }
   }
 
-  //TODO: Add toggleFavourite here.
+  //TODO: Add launch email
+
+  // _onContactListingLaunchEmail(
+  //     ContactListingToggleFavourite
+  //     )
+
+  _onContactListingToggleFavourite(
+      ContactListingToggleFavourite event, Emitter emit) async {
+    try {
+      emit(
+        state.copyWith(
+          newContactListingState: ContactListingLoadingToggleFavourite(),
+        ),
+      );
+
+      await ContactRepoInterface().toggleFavourite(event.contactIdSelected);
+
+      emit(
+        state.copyWith(
+          newContactListingState: ContactListingLoaded(),
+        ),
+      );
+    } catch (e) {
+      state.copyWith(
+        newContactListingState: ContactListingError(
+          message: 'Contact delete submission failed.',
+        ),
+      );
+    }
+  }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assessment/constant.dart';
 import 'package:flutter_assessment/modules/edit_screen/views/edit_screen.dart';
+import 'package:flutter_assessment/modules/home_screen/bloc/contact_listing_bloc.dart';
 import 'package:flutter_assessment/repository/contact_repository.dart';
 import 'package:flutter_assessment/services/contact_model.dart';
 import 'package:flutter_assessment/widgets/header.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,62 +39,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ProfileHeader(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditScreen(contact),
-                      ),
-                    );
-                  },
-                  child: const Text('Edit'),
-                ),
-              ],
-            ),
-            Container(
-              height: 100.0,
-              width: 100.0,
-              child: Center(
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          if (favourite) {
-                            favourite = false;
-                          } else {
-                            favourite = true;
-                          }
-                          ContactRepoInterface().toggleFavourite(contact.id);
-                        });
-                      },
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(contact.avatar),
-                        radius: 50.0,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 5,
-                      right: 5,
-                      child: favourite
-                          ? const Icon(
-                              Icons.star,
-                              color: favouriteStarColor,
-                            )
-                          : const Icon(
-                              Icons.star_border,
-                              color: favouriteStarColor,
-                            ),
-                    )
-                  ],
-                ),
-              ),
+            ProfileEditButtonRow(contact: contact),
+            ProfileAvatar(
+              contact: contact,
+              favourite: favourite,
+              onTapToggleFavourite: () {
+                setState(() {
+                  if (favourite) {
+                    favourite = false;
+                  } else {
+                    favourite = true;
+                  }
+                  // ContactRepoInterface().toggleFavourite(contact.id);
+                  context
+                      .read<ContactListingBloc>()
+                      .add(ContactListingToggleFavourite(contact.id));
+                });
+              },
             ),
             const SizedBox(height: 14),
             Text(
@@ -104,13 +70,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 14),
             Container(
               width: double.infinity,
-              color: Colors.grey,
+              color: defaultGreyColor,
               child: Column(
                 children: [
                   const SizedBox(
                     height: 20.0,
                   ),
-                  const Icon(Icons.email),
+                  const Icon(
+                    Icons.email,
+                    color: kPrimaryColor,
+                  ),
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -148,6 +117,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
+    Key? key,
+    required this.contact,
+    required this.favourite,
+    required this.onTapToggleFavourite,
+  }) : super(key: key);
+
+  final Contact contact;
+  final bool favourite;
+  final Function() onTapToggleFavourite;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 125.0,
+      width: 125.0,
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: onTapToggleFavourite,
+            child: CircleAvatar(
+              backgroundColor: kPrimaryColor,
+              radius: 62.5,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(contact.avatar),
+                radius: 57.5,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 5,
+            right: 5,
+            child: favourite
+                ? const Icon(
+                    Icons.star,
+                    color: favouriteStarColor,
+                  )
+                : const Icon(
+                    Icons.star_border,
+                    color: favouriteStarColor,
+                  ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileEditButtonRow extends StatelessWidget {
+  const ProfileEditButtonRow({
+    Key? key,
+    required this.contact,
+  }) : super(key: key);
+
+  final Contact contact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditScreen(contact),
+              ),
+            );
+          },
+          child: const Text(
+            'Edit',
+            style: TextStyle(
+              color: kPrimaryColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

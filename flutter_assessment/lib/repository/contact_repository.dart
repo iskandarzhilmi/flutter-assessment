@@ -41,7 +41,7 @@ class ContactRepo implements ContactRepoInterface {
     Map<String, dynamic> data;
 
     data = jsonDecode(response.body)['data'][index];
-    var contact = Contact.fromMap(data);
+    Contact contact = Contact.fromMap(data);
 
     return contact;
   }

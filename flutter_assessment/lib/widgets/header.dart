@@ -17,9 +17,11 @@ class ProfileHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: const Icon(
-                Icons.arrow_back_rounded,
+                Icons.arrow_back_ios,
                 color: Colors.white,
               ),
             ),

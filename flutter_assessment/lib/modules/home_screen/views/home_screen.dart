@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               favouriteSelected = false;
                             });
                           },
-                          label: Text('All'),
+                          label: const Text('All'),
                         ),
                         ChoiceChip(
                           selected: favouriteSelected,
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               favouriteSelected = true;
                             });
                           },
-                          label: Text('Favourite'),
+                          label: const Text('Favourite'),
                         ),
                       ],
                     ),
@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child:
                           BlocBuilder<ContactListingBloc, ContactListingModel>(
                         builder: (context, state) {
+                          //TODO: Add new states, toggle favourite and delete.
                           if (state.contactListingState
                               is ContactListingLoadingFromApi) {
                             return const Center(
@@ -201,7 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: const Icon(Icons.email),
         ),
-        // trailing: Icon(Icons.rocket),
       ),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -219,10 +219,11 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: const Color(0xFFEBF8F6),
             foregroundColor: Colors.yellow,
           ),
-          VerticalDivider(
-              // width: 0,
-              // thickness: 5,
-              ),
+          // VerticalDivider(),
+          Container(
+            width: 2,
+            color: Color(0xffC5E2DE),
+          ),
           SlidableAction(
             onPressed: (context) {
               showDialog(
@@ -244,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           context
                               .read<ContactListingBloc>()
                               .add(ContactListingDelete(contact.id));
+                          //TODO: can use to show snackbar
                           onRefresh();
                           Navigator.pop(context);
                         },
@@ -291,11 +293,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Container SearchTextField() {
     return Container(
       height: 80.0,
-      color: Colors.grey,
+      color: Color(0xffE5E5E5),
       child: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Container(
-          // color: h,
           child: TextField(
             // controller: textEditingController,
             onChanged: (text) {
@@ -322,7 +323,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //TODO: Put this in UI file and rename it as ScreenHEader
   Container ContactHeader({required ContactListingBloc contactBloc}) {
     return Container(
       height: 70.0,
@@ -342,9 +342,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             InkWell(
-              onTap: () {
+              onTap: () async {
                 contactBloc.add(const ContactListingFromApiTriggered());
-                onRefresh();
+                await onRefresh();
               },
               child: const Icon(
                 Icons.refresh,

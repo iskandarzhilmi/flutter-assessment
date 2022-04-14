@@ -5,14 +5,14 @@ class ContactListingModel extends Equatable {
   final List<Contact> contactListFromDatabase;
   final Contact? submittedContact;
   final ContactListingState contactListingState;
-  final int? contactIdToDelete;
+  final int? contactIdSelected;
 
   const ContactListingModel({
     required this.contactListFromApi,
     required this.contactListFromDatabase,
     this.submittedContact,
     required this.contactListingState,
-    this.contactIdToDelete,
+    this.contactIdSelected,
   });
 
   @override
@@ -20,7 +20,7 @@ class ContactListingModel extends Equatable {
         contactListFromApi,
         contactListFromDatabase,
         submittedContact,
-        contactIdToDelete,
+        contactIdSelected,
         contactListingState
       ];
 
@@ -28,7 +28,7 @@ class ContactListingModel extends Equatable {
     return ContactListingModel(
       contactListFromApi: const [],
       contactListFromDatabase: const [],
-      contactListingState: ContactListingLoading(),
+      contactListingState: ContactListingLoadingFromApi(),
     );
   }
 
@@ -36,7 +36,7 @@ class ContactListingModel extends Equatable {
     List<Contact>? newContactListFromApi,
     List<Contact>? newContactListFromDatabase,
     Contact? newSubmittedContact,
-    int? newContactIdToDelete,
+    int? newContactIdSelected,
     ContactListingState? newContactListingState,
   }) {
     return ContactListingModel(
@@ -44,7 +44,7 @@ class ContactListingModel extends Equatable {
       contactListFromDatabase:
           newContactListFromDatabase ?? contactListFromDatabase,
       submittedContact: newSubmittedContact ?? submittedContact,
-      contactIdToDelete: newContactIdToDelete ?? contactIdToDelete,
+      contactIdSelected: newContactIdSelected ?? contactIdSelected,
       contactListingState: newContactListingState ?? contactListingState,
     );
   }
@@ -60,6 +60,10 @@ class ContactListingLoading extends ContactListingState {}
 class ContactListingLoadingFromApi extends ContactListingState {}
 
 class ContactListingLoadingFromDatabase extends ContactListingState {}
+
+class ContactListingLoadingDelete extends ContactListingState {}
+
+class ContactListingLoadingToggleFavourite extends ContactListingState {}
 
 class ContactListingLoaded extends ContactListingState {}
 
